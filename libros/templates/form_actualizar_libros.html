@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		{% load static %}
+
+		<meta charset="UTF-8"/>
+		<title>Actualizar libros</title>
+
+		<link rel="icon" href="{% static "imagenes/logo.png"%}"/>
+
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"/>
+		
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+
+
+		<script>
+            const botonCerrarSesion = () => {
+                //if(window.confirm("¿Está Seguro De Querer Cerrar La Sesión?")){
+                //    window.location.href = "/logout";
+                //}
+
+				Swal.fire({
+					title: 'Pregunta',
+					text: "¿Está Seguro(a) De querer Cerrar La Sesión?",
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Aceptar',
+					cancelButtonText : 'Cancelar'
+				  }).then((result) => {
+					if (result.isConfirmed) {
+					  
+						window.location.href = "/logout";
+
+					}
+				  })
+            }
+        </script>
+
+	</head>
+<body>
+
+	<div class="container">
+		<nav class="navbar navbar-expand-lg bg-success">
+			<div class="container-fluid">
+
+			  <span class="navbar-brand text-white">Usuario Logeado</span><span class="navbar-brand text-white">
+				  {{ nomUsuario }}
+			  </span>
+			  
+			  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+				  <span class="navbar-toggler-icon"></span>
+			  </button>
+			  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+				  <div class="navbar-nav">
+					  <a class="nav-link text-center text-white" href="/menu_admin">Inicio</a>
+					  <a class="nav-link text-center text-white" href="/perfil_admin/{{idusu}}">Ver Perfil</a>
+					  <a class="nav-link text-center text-white" href="/form_registrar_categoria">Gestionar Categoria</a>
+					  <a class="nav-link text-center text-white" href="/form_registrar_autor">Gestionar Autores</a>
+					  <a class="nav-link text-center text-white" href="/form_registrar_editorial">Gestionar Editorial</a>
+					  <a class="nav-link text-center text-white" href="/listar_usuarios">Gestionar Usuarios</a>
+					  <a class="nav-link text-center text-white" href="/form_registrar_libros">Formulario de Libros</a>
+					  <a class="nav-link text-center text-white" href="/gesti_prestamos">Gestionar Prestamos</a>
+					  <a class="nav-link text-center text-white" href="/listar_historial">Ver Historial</a>
+					  <a class="nav-link text-center text-white" href="#" onClick="botonCerrarSesion()">Cerrar Sesión</a>					
+				  </div>
+			  </div>
+			</div>
+	  </nav>
+	  
+	  	<div style="background-color:#71aa27; padding-top:10px; padding-bottom:10px;">		
+			<div style="width:80%; background-color:#fff; margin:auto;">
+				{% if encontrado %}
+				
+				<form action="/actualizar_libros/{{ encontrado.id }}" method="post">
+					{% csrf_token %}
+					<center>
+						<h1>Actualización de libros</h1>
+						<input value="{{ encontrado.titulo_libros }}" class="form-control form-control-lg text-center" style="margin-bottom:10px; width:95%;"  type="text"  placeholder="Digite El Titulo"  name="txttit" required/>
+						
+						<select name="cbocat" class="form-select-lg text-center" style="margin-bottom:10px; width:95%;" required>
+							<option value="">Seleccione Categoria</option>
+							
+								{% for x in opcionescategoria %}
+
+									{% if encontrado.categoria_id == x.id %}
+										<option value="{{ x.id }}" selected>{{ x.nombre_categoria }}</option>
+									{% else %}
+										<option value="{{ x.id }}">{{ x.nombre_categoria }}</option>
+									{% endif %}
+									
+								{% endfor %}
+
+						</select>
+
+						<select name="cboart" class="form-select-lg text-center" style="margin-bottom:10px; width:95%;" required>
+							<option value="">Seleccione Autor</option>
+							
+								{% for x in opcionesautor %}
+
+									{% if encontrado.autor_id == x.id %}
+										<option value="{{ x.id }}" selected>{{ x.nombre_autor }}</option>
+									{% else %}
+										<option value="{{ x.id }}">{{ x.nombre_autor }}</option>
+									{% endif %}
+									
+								{% endfor %}
+
+						</select>
+
+						<select name="cboedi" class="form-select-lg text-center" style="margin-bottom:10px; width:95%;" required>
+							<option value="">Seleccione Editorial</option>
+							
+								{% for x in opcioneseditorial %}
+
+									{% if encontrado.editorial_id == x.id %}
+									<option value="{{ x.id }}" selected>{{ x.nombre_editorial }}</option>
+									{% else %}
+									<option value="{{ x.id }}">{{ x.nombre_editorial }}</option>
+									{% endif %}							
+								
+								{% endfor %}
+
+						</select>
+
+						<input value="{{ encontrado.año_publicacion }}" class="form-control form-control-lg text-center" style="margin-bottom:10px; width:95%;"  type="number"  placeholder="Año de publicacion"  name="txtpubli" required/>
+
+						
+						<input type="submit" class="btn btn-success btn-lg"     style="width:95%;" value="Guardar Cambios"/>
+					</center>
+				</form>
+				{% endif %}
+				<br/>
+			
+			</div>
+
+		</div>
+
+	</div>
+	
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+	
+</body>
+</html>

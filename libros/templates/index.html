@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>index</title>
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"/>
+	
+	
+		<script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
+		<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
+	
+	
+	</head>
+
+	<body>
+		<div style="background-color:#f3edea">
+
+		<h1 class="text-center" style="padding: 30px; color:#1f2958">Bienvenido a la Biblioteca</h1>
+
+
+			
+			<div class="container text-center" style="width:25%; padding: 50px; background-color:#f3edea">
+				<form action="/login" method="post">
+					{% csrf_token %}
+					<h5>Inicio de Sesión</h5>
+					<input class="form-control form-control-lg text-center mb-2" type="text"     placeholder="Nombre de Usuario"  name="txtusu"  required/>
+					<input class="form-control form-control-lg text-center mb-2" type="password" placeholder="Contraseña"         name="txtpas"  required/>
+					<button type="submit" class="btn btn-primary btn-lg" style="width:100%">Login</button>
+				</form>
+				<br/>
+				
+				
+				{% if r2 %}
+					<script>
+						alertify.error('{{ r2 }}');
+					</script>
+				{% endif %}
+
+
+			</div>
+		</div>
+		
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+	</body>
+</html>

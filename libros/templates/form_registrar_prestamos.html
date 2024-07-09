@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+        {% load static %}
+
+        <meta charset="UTF-8"/>
+        <title>Formulario de Préstamos</title>
+
+        <link rel="icon" href="{% static "imagenes/logo.png"%}"/>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"/>
+
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+
+        <script>
+            const botonCerrarSesion = () => {
+                Swal.fire({
+                    title: 'Pregunta',
+                    text: "¿Está Seguro(a) De querer Cerrar La Sesión?",
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = "/logout";
+                    }
+                })
+            }
+        </script>
+
+        <script>
+            var today = new Date().toISOString().split('T')[0];
+
+            var sevenDaysLater = new Date();
+            sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+            var maxDate = sevenDaysLater.toISOString().split('T')[0];
+
+            document.getElementById("fecha_devolucion").min = today;
+            document.getElementById("fecha_devolucion").max = maxDate;
+        </script>
+
+    </head>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg bg-primary">
+        <div class="container-fluid">
+
+            <a href="/menu_usuario">
+                <img src="{% static "imagenes/logo.png"%}" width="50px" style="margin-right:10px;" alt="No Encontrada"/>
+            </a>
+
+            <span class="navbar-brand text-white">Usuario Logeado</span><span class="navbar-brand text-white">
+                {{ nomUsuario }}
+            </span>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-link text-center text-white" href="/menu_usuario">Inicio</a>
+                    <a class="nav-link text-center text-white" href="/perfil_usuario/{{idusu}}">Ver Perfil</a>
+                    <a class="nav-link text-center text-white" href="/listar_libros">Listado de Libros</a>
+                    <a class="nav-link text-center text-white" href="/form_registrar_prestamos">Formulario de Préstamos</a>
+                    <a class="nav-link text-center text-white" href="/listar_prestamos">Listado de Préstamos</a>
+                    <a class="nav-link text-center text-white" href="#" onClick="botonCerrarSesion()">Cerrar Sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div style="background-color:#0040A1; padding-top:10px; padding-bottom:10px;">
+
+        <div style="width:80%; background-color:#fff; margin:auto;">
+
+            <form action="/registrar_prestamo" method="post">
+                {% csrf_token %}
+                <center>
+                    <h1>Registro de Préstamo</h1>
+                    <select name="cbolib" class="form-select-lg text-center" style="margin-bottom:10px; width:95%;" required>
+                        <option value="">Seleccione Libro</option>
+            
+                            {% for x in opcioneslibros %}
+                                <option value="{{ x.id }}">{{ x.titulo_libros }}</option> 
+                            {% endfor %}
+
+                    </select>
+
+                    <input id="fecha_devolucion" class="form-control form-control-lg text-center" style="margin-bottom:10px; width:95%;" type="date" placeholder="Fecha de Devolución" name="fecha_devolucion" required/>
+
+
+                    <div style="margin: 10px;">
+                    <h7>Recuerda que al presionar <b>"Registrar Préstamo"</b> no podrás eliminarlo ni editarlo más adelante</h7><br>
+                    <h7>Puedes seleccionar en un maximo de una semana (7 dias) desde que registras el prestamo</h7>
+    
+                    </div>
+
+                    <input type="submit" class="btn btn-success btn-lg" onClick="botonConfirmPrestamo" style="width:40%;" value="Registrar Préstamo"/>
+
+
+                    <script>
+                        var today = new Date().toISOString().split('T')[0];
+                        var sevenDaysLater = new Date();
+                        sevenDaysLater.setDate(sevenDaysLater.getDate() + 7);
+                        var maxDate = sevenDaysLater.toISOString().split('T')[0];
+
+                        document.getElementById("fecha_devolucion").min = today;
+                        document.getElementById("fecha_devolucion").max = maxDate;
+                    </script>
+                </center>
+            </form>
+
+            <br/>
+
+        </div>
+
+    </div>
+
+    {% if mensaje %}
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Acción Correcta',
+                text: '{{ mensaje }}',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        </script>
+    {% endif %}
+
+    {% if error %}
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ error }}',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        </script>
+    {% endif %}
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

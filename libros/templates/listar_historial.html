@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		{% load static %}
+
+		<meta charset="UTF-8"/>
+		<title>Historial</title>
+
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"/>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"/>
+		
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
+
+
+		<script>
+            const botonCerrarSesion = () => {
+                //if(window.confirm("¿Está Seguro De Querer Cerrar La Sesión?")){
+                //    window.location.href = "/logout";
+                //}
+
+
+				Swal.fire({
+					title: 'Pregunta',
+					text: "¿Está Seguro(a) De querer Cerrar La Sesión?",
+					icon: 'question',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Aceptar',
+					cancelButtonText : 'Cancelar'
+				  }).then((result) => {
+					if (result.isConfirmed) {
+					  
+						window.location.href = "/logout";
+
+					}
+				  })
+				
+            }
+        </script>
+
+	</head>
+<body>
+
+
+	<div class="container">
+		<nav class="navbar navbar-expand-lg bg-success">
+			<div class="container-fluid">
+
+				<span class="navbar-brand text-white">Usuario Logeado</span><span class="navbar-brand text-white">
+					{{ nomUsuario }}
+				</span>
+				
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav">
+						<a class="nav-link text-center text-white" href="/menu_admin">Inicio</a>
+						<a class="nav-link text-center text-white" href="/perfil_admin/{{idusu}}">Ver Perfil</a>
+						<a class="nav-link text-center text-white" href="/form_registrar_categoria">Gestionar Categoria</a>
+						<a class="nav-link text-center text-white" href="/form_registrar_autor">Gestionar Autores</a>
+						<a class="nav-link text-center text-white" href="/form_registrar_editorial">Gestionar Editorial</a>
+						<a class="nav-link text-center text-white" href="/listar_usuarios">Gestionar Usuarios</a>
+						<a class="nav-link text-center text-white" href="/form_registrar_libros">Formulario de Libros</a>
+						<a class="nav-link text-center text-white" href="/gesti_prestamos">Gestionar Prestamos</a>
+						<a class="nav-link text-center text-white" href="/listar_historial">Ver Historial</a>
+						<a class="nav-link text-center text-white" href="#" onClick="botonCerrarSesion()">Cerrar Sesión</a>					
+					</div>
+				</div>
+			</div>
+	  	</nav>
+		
+		<div style="background-color:#71aa27; padding-top:10px; padding-bottom:10px;">
+		
+			<div style="width:80%; background-color:#fff; margin:auto;">
+				
+				<h1 class="text-center">Historial de Acciones de Usuarios</h1>
+
+
+				{% if his %}
+
+
+				<table class="table table-hover" style="width:95%; margin:auto;">
+					<thead>
+						<tr class="text-center">
+							<th>ID</th>
+							<th>USUARIO</th>
+							<th>ACCION</th>
+							<th>TABLA</th>
+							<th>FECHA y HORA</th>
+						</tr>
+					</thead>
+					<tbody class="text-center">
+						
+						{% for x in his %}
+
+						<tr class="align-middle">
+							<td>{{ x.id }}</td>
+							<td>{{ x.usuario.nombre_usuario }}</td>
+							<td>{{ x.descripcion_historial }}</td>
+							<td>{{ x.tabla_afectada_historial }}</td>
+							<td>{{ x.fecha_hora_historial }}</td>
+						</tr>
+						
+						{% endfor %}
+
+					</tbody>
+				</table>
+
+
+				{% else %}
+
+					<h4 class="text-danger text-center mb-3">
+						No Hay Regisros De Acciones Para Mostrar!!
+					</h4>
+				
+				{% endif %}
+
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+	
+</body>
+</html>
